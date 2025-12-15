@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Using strings instead of enums for SQLite compatibility
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  role         String    @default("MEMBER")
+  country      String
+  createdAt    DateTime  @default(now()) @map("created_at")
+  
+  orders         Order[]
+  paymentMethods PaymentMethod[]
+  
+  @@map("users")
+}
+
+model Restaurant {
+  id      String  @id @default(uuid())
+  name    String
+  country String
+  
+  menuItems MenuItem[]
+  
+  @@map("restaurants")
+}
+
+model MenuItem {
+  id           String @id @default(uuid())
+  restaurantId String @map("restaurant_id")
+  name         String
+  price        Float
+  
+  restaurant Restaurant  @relation(fields: [restaurantId], references: [id])
+  orderItems OrderItem[]
+  
+  @@map("menu_items")
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  userId    String      @map("user_id")
+  status    String      @default("CREATED")
+  country   String
+  createdAt DateTime    @default(now()) @map("created_at")
+  
+  user       User        @relation(fields: [userId], references: [id])
+  orderItems OrderItem[]
+  
+  @@map("orders")
+}
+
+model OrderItem {
+  id         String @id @default(uuid())
+  orderId    String @map("order_id")
+  menuItemId String @map("menu_item_id")
+  quantity   Int
+  
+  order    Order    @relation(fields: [orderId], references: [id])
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
+  
+  @@map("order_items")
+}
+
+model PaymentMethod {
+  id     String @id @default(uuid())
+  userId String @map("user_id")
+  type   String
+  last4  String
+  
+  user User @relation(fields: [userId], references: [id])
+  
+  @@map("payment_methods")
+}

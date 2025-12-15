@@ -1,0 +1,40 @@
+{
+    "name": "shield-food-hub",
+    "version": "1.0.0",
+    "description": "A full-stack food ordering application with RBAC and country-based access control",
+    "scripts": {
+        "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+        "server:dev": "cd server && npm run start:dev",
+        "client:dev": "cd client && npm run dev",
+        "build": "npm run server:build && npm run client:build",
+        "server:build": "cd server && npm run build",
+        "client:build": "cd client && npm run build",
+        "setup": "npm run server:setup && npm run client:setup",
+        "server:setup": "cd server && npm install && npm run prisma:generate && npm run prisma:migrate && npm run prisma:seed",
+        "client:setup": "cd client && npm install",
+        "clean": "npm run server:clean && npm run client:clean",
+        "server:clean": "cd server && rm -rf node_modules dist",
+        "client:clean": "cd client && rm -rf node_modules .next",
+        "deploy:prepare": "npm run setup && npm run build",
+        "deploy:info": "echo 'See RAILWAY_VERCEL_DEPLOYMENT.md for deployment instructions'"
+    },
+    "keywords": [
+        "food-ordering",
+        "rbac",
+        "nextjs",
+        "nestjs",
+        "typescript",
+        "prisma",
+        "jwt",
+        "full-stack"
+    ],
+    "author": "S.H.I.E.L.D. Development Team",
+    "license": "MIT",
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    },
+    "engines": {
+        "node": ">=18.0.0",
+        "npm": ">=8.0.0"
+    }
+}
