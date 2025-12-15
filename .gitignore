@@ -18,6 +18,8 @@ build/
 *.db
 *.sqlite
 dev.db
+server/dev.db
+server/prisma/dev.db
 
 # Logs
 npm-debug.log*
